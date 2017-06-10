@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 /**
@@ -11,10 +12,7 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
-    private Stage primaryStage;
-
     public void start(Stage primaryStage) throws Exception {
-        this.primaryStage = primaryStage;
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/RootWindow.fxml"));
@@ -26,5 +24,13 @@ public class MainApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
+    }
+
+    public static void makeAlertDialog(String text) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Ошибка!");
+        alert.setContentText(text);
+
+        alert.showAndWait();
     }
 }

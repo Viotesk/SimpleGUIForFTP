@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.trein.gui.controllers.RootController">
-   <top>
-      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <items>
-          <Button mnemonicParsing="false" text="Button" />
-        </items>
-      </ToolBar>
-   </top>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.trein.gui.controllers.RootController">
    <center>
       <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
@@ -24,13 +23,8 @@
                <children>
                   <VBox layoutX="98.0" layoutY="79.0" prefHeight="358.0" prefWidth="296.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label text="Local Repository:" />
+                        <Label text="Локальный сайт:" />
                         <TreeView fx:id="localRepositoryBrowser" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <ToolBar prefHeight="40.0" prefWidth="200.0">
-                          <items>
-                            <Button mnemonicParsing="false" text="Button" />
-                          </items>
-                        </ToolBar>
                      </children>
                   </VBox>
                </children>
@@ -39,13 +33,17 @@
                <children>
                   <VBox layoutX="98.0" layoutY="79.0" prefHeight="358.0" prefWidth="296.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label text="Remote repository:" />
-                        <TreeView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <ToolBar prefHeight="40.0" prefWidth="200.0">
+                        <Label fx:id="remoteServerLabel" text="Нет подключения" />
+                        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" VBox.vgrow="ALWAYS">
                           <items>
-                            <Button mnemonicParsing="false" text="Button" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                 <children>
+                                    <TreeView fx:id="remoteRepoBrowser" layoutX="67.0" layoutY="-16.0" prefHeight="214.0" prefWidth="394.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
                           </items>
-                        </ToolBar>
+                        </SplitPane>
                      </children>
                   </VBox>
                </children>
@@ -53,4 +51,63 @@
         </items>
       </SplitPane>
    </center>
+   <bottom>
+      <VBox BorderPane.alignment="CENTER" />
+   </bottom>
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER_LEFT" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="200.0">
+               <children>
+                  <Label text="Хост:">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="4.0" right="4.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="hostField" prefWidth="100.0" />
+                  <Label text="Имя пользователя:">
+                     <HBox.margin>
+                        <Insets left="6.0" right="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="loginField" prefWidth="100.0" />
+                  <Label text="Пароль: ">
+                     <padding>
+                        <Insets left="6.0" right="4.0" />
+                     </padding>
+                  </Label>
+                  <PasswordField fx:id="passwordField" prefWidth="100.0" />
+                  <Label text="Порт:">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="6.0" right="4.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="portField" prefWidth="50.0" />
+                  <Button mnemonicParsing="false" onMouseClicked="#handleConnect" text="Подключится">
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </Button>
+                  <MenuButton mnemonicParsing="false">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+               </children>
+            </HBox>
+            <TextArea fx:id="statusArea" editable="false" prefHeight="100.0" prefWidth="200.0">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin>
+            </TextArea>
+         </children>
+      </VBox>
+   </top>
 </BorderPane>
