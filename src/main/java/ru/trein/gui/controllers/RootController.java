@@ -1,15 +1,21 @@
 package ru.trein.gui.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import ru.trein.gui.MainApp;
-import ru.trein.gui.nodes.FilePathTreeItem;
+import ru.trein.gui.nodes.FileTreeItem;
+import ru.trein.gui.nodes.Node;
 import ru.trein.gui.nodes.RemoteRepoTreeItem;
 import ru.trein.gui.util.FTP;
+import ru.trein.gui.util.LocalChildrenBuilder;
 import ru.trein.gui.util.ResponseParser;
 import ru.trein.gui.util.WriterGUI;
 
@@ -23,6 +29,18 @@ import java.nio.file.Path;
 import java.util.regex.Pattern;
 
 public class RootController {
+
+    @FXML
+    private TableView<Node> localFilesTable;
+    @FXML
+    private TableColumn<Node, ImageView> localImg;
+    @FXML
+    private TableColumn<Node, String> localFileName;
+    @FXML
+    private TableColumn<Node, Long> localFileSize;
+    @FXML
+    private TableColumn<Node, Long> localFileModify;
+
 
     @FXML
     private Label remoteServerLabel;
@@ -42,19 +60,22 @@ public class RootController {
     @FXML
     private TreeView<String> remoteRepoBrowser;
 
+    private LocalChildrenBuilder localChildrenBuilder = new LocalChildrenBuilder();
+
     public void initialize() {
         TreeItem<String> rootNode = new TreeItem<String>("MyComputer", new ImageView(new Image(getClass().getResourceAsStream("/img/computer.png"))));
 
         Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
 
         for (Path path : rootDirectories) {
-            FilePathTreeItem treeNode = new FilePathTreeItem(new File(path.toString()));
-            rootNode.getChildren().add(treeNode);
+            File file = new File(path.toString());
+            Node node = new Node(file.isDirectory(), file.lastModified(), file.length(), file.getAbsolutePath(), file.getAbsolutePath(), localChildrenBuilder);
+            if (node.isDirectory())
+                rootNode.getChildren().add(new FileTreeItem(node));
         }
 
         rootNode.setExpanded(true);
         localRepositoryBrowser.setRoot(rootNode);
-        localRepositoryBrowser.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         Pattern p = Pattern.compile("(\\d+\\.?\\d*)?");
         portField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -65,6 +86,33 @@ public class RootController {
             if (!newValue.isEmpty() && Integer.parseInt(newValue) > 65535)
                 portField.setText("65535");
         });
+
+        localRepositoryBrowser.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getButton() != MouseButton.PRIMARY)
+                    return;
+
+                FileTreeItem selectedItem = (FileTreeItem) localRepositoryBrowser.getSelectionModel().getSelectedItem();
+
+                if (selectedItem == null)
+                    return;
+
+//                System.err.println(selectedItem.getNode().getName());
+                showLocalFilesTable(selectedItem);
+
+
+            }
+        });
+
+
+        localFilesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        localImg.setCellValueFactory(new PropertyValueFactory<>("img"));
+        localFileName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        localFileSize.setCellValueFactory(new PropertyValueFactory<>("size"));
+        localFileModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
+
 
         WriterGUI.getInstance().setOut(statusArea);
         WriterGUI.getInstance().writeStatus("Добро пожаловать!");
@@ -102,8 +150,10 @@ public class RootController {
 
             if (FTP.getInstance().connect(hostField.getText(), port))
                 WriterGUI.getInstance().writeStatus("Подключение выполнено успешно!");
-            else
+            else {
+                WriterGUI.getInstance().writeStatus("Не удалось подключится, проверьте хост и порт.");
                 return;
+            }
 
         } catch (UnknownHostException e) {
             WriterGUI.getInstance().writeStatus("Не удалось подключится, проверьте хост и порт.");
@@ -150,7 +200,6 @@ public class RootController {
         TreeItem<String> rootNode = new TreeItem<String>("/", new ImageView(new Image(getClass().getResourceAsStream("/img/folder-open.png"))));
         rootNode.setExpanded(true);
         remoteRepoBrowser.setRoot(rootNode);
-        remoteRepoBrowser.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         String list = outputStream.toString();
         String[] nodes = list.split("\\n");
@@ -161,6 +210,15 @@ public class RootController {
             rootNode.getChildren().add(treeItem);
         }
 
+    }
+
+    private void showLocalFilesTable(FileTreeItem treeItem) {
+
+        treeItem.getChildren();
+
+        ObservableList<Node> list = FXCollections.observableArrayList(treeItem.getNode().getChildren());
+
+        localFilesTable.setItems(list);
     }
 
     private boolean fieldIsEmpty(TextField field) {

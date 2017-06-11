@@ -55,7 +55,6 @@ public class FilePathTreeItem extends TreeItem<String> {
             });
         } else {
             this.setGraphic(new ImageView(fileImage));
-            return;
         }
     }
 
