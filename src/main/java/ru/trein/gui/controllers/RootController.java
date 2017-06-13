@@ -8,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -96,6 +98,14 @@ public class RootController {
                 portField.setText("65535");
         });
 
+        hostField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode().equals(KeyCode.ENTER))
+                    connect();
+            }
+        });
+
         localRepositoryBrowser.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -128,11 +138,13 @@ public class RootController {
 
 
     public void handleConnect(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton() == MouseButton.PRIMARY)
+            connect();
+    }
+
+    private void connect() {
         int port;
         char[] password;
-
-        if (mouseEvent.getButton() != MouseButton.PRIMARY)
-            return;
 
         if (fieldIsEmpty(hostField)) {
             MainApp.makeAlertDialog("Поле хоста не может быть пустым!");

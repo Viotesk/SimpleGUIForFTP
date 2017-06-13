@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
@@ -19,6 +20,7 @@ public class MainApp extends Application {
         Parent root = loader.load();
         Scene scene = new Scene(root);
 
+        primaryStage.getIcons().add(new Image("/img/mainIcon.png"));
         primaryStage.setTitle("Simple FTP Client");
         primaryStage.setScene(scene);
         primaryStage.show();
