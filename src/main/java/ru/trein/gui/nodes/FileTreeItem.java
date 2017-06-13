@@ -67,6 +67,10 @@ public class FileTreeItem extends TreeItem<String> {
         return node.getChildrenBuilder().buildChildren(treeItem);
     }
 
+    public void reloadChildrens() {
+        super.getChildren().setAll(buildChildren(this));
+    }
+
     public Node getNode() {
         return node;
     }

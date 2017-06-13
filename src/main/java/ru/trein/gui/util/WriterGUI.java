@@ -5,9 +5,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
-/**
- * Created by Shpien on 09.06.2017.
- */
 public class WriterGUI {
     private static WriterGUI instance;
     private TextArea out;

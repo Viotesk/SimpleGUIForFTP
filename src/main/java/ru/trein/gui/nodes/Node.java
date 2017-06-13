@@ -2,14 +2,11 @@ package ru.trein.gui.nodes;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import ru.trein.gui.util.ChildrenBuilder;
+import ru.trein.gui.util.builders.ChildrenBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Shpien on 10.06.2017.
- */
 public class Node {
 
     private ImageView img;
@@ -71,7 +68,25 @@ public class Node {
         return path;
     }
 
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public ChildrenBuilder getChildrenBuilder() {
         return childrenBuilder;
+    }
+
+    public void setChildrenBuilder(ChildrenBuilder childrenBuilder) {
+        this.childrenBuilder = childrenBuilder;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "isDirectory=" + isDirectory +
+                ", name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                '}';
     }
 }

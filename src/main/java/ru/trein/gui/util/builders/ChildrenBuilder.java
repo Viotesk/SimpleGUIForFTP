@@ -1,4 +1,4 @@
-package ru.trein.gui.util;
+package ru.trein.gui.util.builders;
 
 import javafx.collections.ObservableList;
 import ru.trein.gui.nodes.FileTreeItem;

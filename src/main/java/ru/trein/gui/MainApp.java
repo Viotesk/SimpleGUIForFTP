@@ -7,12 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
-/**
- * Created by Shpien on 08.06.2017.
- */
 public class MainApp extends Application {
+    private static Stage primartStage;
 
     public void start(Stage primaryStage) throws Exception {
+        primartStage = primaryStage;
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/RootWindow.fxml"));
@@ -24,6 +23,10 @@ public class MainApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
+    }
+
+    public static Stage getPrimartStage() {
+        return primartStage;
     }
 
     public static void makeAlertDialog(String text) {
