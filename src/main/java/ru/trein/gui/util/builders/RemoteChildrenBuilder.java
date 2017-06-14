@@ -8,6 +8,8 @@ import ru.trein.gui.util.FTP;
 import ru.trein.gui.util.ResponseParser;
 import ru.trein.gui.util.WriterGUI;
 
+import java.util.HashSet;
+
 public class RemoteChildrenBuilder implements ChildrenBuilder {
     @Override
     public ObservableList<FileTreeItem> buildChildren(FileTreeItem fileTreeItem) {
@@ -27,7 +29,8 @@ public class RemoteChildrenBuilder implements ChildrenBuilder {
 
         String[] nodes = nodesString.split("\\n");
 
-        ObservableList<FileTreeItem> children = FXCollections.observableArrayList();
+        ObservableList<FileTreeItem> children = FXCollections.observableArrayList(new HashSet<>());
+//        children.clear();
 
         for (String nodeStr : nodes) {
             if (nodeStr.isEmpty() || nodeStr.equals(""))

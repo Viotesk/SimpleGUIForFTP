@@ -24,6 +24,8 @@ public class Downloader extends Abortable implements Runnable {
     private int bufferSize = 1024;
     private int downloaded;
 
+    private int debug = 0;
+
     public Downloader(ObservableList<Node> nodesForDownload, FileTreeItem selectedLocalItem, ChildrenBuilder localChildrenBuilder, LoadController loadController) {
         aborted = false;
         this.nodesForDownload = nodesForDownload;
@@ -45,6 +47,8 @@ public class Downloader extends Abortable implements Runnable {
     private void downloadDir(ObservableList<Node> nodes, FileTreeItem target) {
         if(aborted)
             return;
+
+//        target.setFirstTimeChildren(true);
 
         ObservableList<Node> dirs = FXCollections.observableArrayList();
 
@@ -95,6 +99,8 @@ public class Downloader extends Abortable implements Runnable {
                     return;
                 }
 
+                System.err.println(++debug);
+
                 if (!FTP.getInstance().transferIsSuccessfull()) {
                     WriterGUI.getInstance().writeStatus("Передача не удалась!");
                     return;
@@ -121,6 +127,7 @@ public class Downloader extends Abortable implements Runnable {
             target.getNode().addChildren(uploadedNode);
 
             FileTreeItem currItem = new FileTreeItem(dir);
+            currItem.setFirstTimeChildren(true);
             currItem.getChildren();
             List<Node> childrens = currItem.getNode().getChildren();
 

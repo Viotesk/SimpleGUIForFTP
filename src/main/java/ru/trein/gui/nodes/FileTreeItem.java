@@ -16,6 +16,10 @@ public class FileTreeItem extends TreeItem<String> {
 
     private boolean isFirstTimeChildren = true;
 
+    public void setFirstTimeChildren(boolean firstTimeChildren) {
+        isFirstTimeChildren = firstTimeChildren;
+    }
+
     @SuppressWarnings("unchecked")
     public FileTreeItem(Node node) {
         super(node.getName());
@@ -67,9 +71,7 @@ public class FileTreeItem extends TreeItem<String> {
         return node.getChildrenBuilder().buildChildren(treeItem);
     }
 
-    public void reloadChildrens() {
-        super.getChildren().setAll(buildChildren(this));
-    }
+
 
     public Node getNode() {
         return node;
