@@ -102,7 +102,7 @@ public class Downloader extends Abortable implements Runnable {
 
                 Node uploadedNode = new Node(false, nodesForDownload.getModify(),
                         nodesForDownload.getSize(), nodesForDownload.getName(),
-                        path + nodesForDownload.getName(), localChildrenBuilder);
+                        path + File.separator + nodesForDownload.getName(), localChildrenBuilder);
 
                 target.getNode().addChildren(uploadedNode);
             } catch (FileNotFoundException e) {
